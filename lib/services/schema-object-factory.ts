@@ -306,16 +306,18 @@ export class SchemaObjectFactory {
     if (!includes(schemaRefsStack, enumName)) {
       schemaRefsStack.push(enumName);
 
-      const _enum = param.enum
-        ? param.enum
-        : param.schema['items']
-        ? param.schema['items']['enum']
-        : param.schema['enum'];
+      const _enumType = param.isArray
+        ? param.items['type']
+        : param.type;
+
+      const _enumValues = param.isArray
+        ? param.items['enum']
+        : param.enum;
 
       schemas.push({
         [enumName]: {
-          type: 'string',
-          enum: _enum
+          type: _enumType,
+          enum: _enumValues
         }
       });
     }
